@@ -111,7 +111,7 @@ if ($result->num_rows > 0) {
             $moarsql = "UPDATE Player_Units SET Num = (Num - $dead) where Name = '$nom' and Unit_ID = $ID";
 
             if ($conn->query($moarsql) === TRUE) {
-                
+
 
             } else {
                 echo "Error updating record: " . $conn->error;

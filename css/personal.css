@@ -1,0 +1,125 @@
+.user-pic {
+  margin-top: 3px;
+}
+
+img#profileimg {
+  width: 50%;
+  border-radius: 50%;
+  padding: 5px;
+}
+
+.navigation-brand {
+  padding: 20px 20px;
+}
+
+/*responsive centered button overlay */
+.img-wrapper {
+  position: relative;
+ }
+
+.img-overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+}
+
+.img-overlay:before {
+  content: ' ';
+  display: block;
+  /* adjust 'height' to position overlay content vertically */
+  height: 65%;
+}
+
+.btn-responsive {
+  /* matches 'btn-md' */
+  padding: 10px 16px;
+  font-size: 18px;
+  line-height: 1.3333333;
+  border-radius: 6px;
+}
+
+/* Responsive centered text overlay */
+.containerBox {
+    position: relative;
+    display: inline-block;
+}
+
+.text-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: fill-available;
+    height: fill-available;
+}
+
+.text-box, .medium-box, .small-box, .img-box {
+    position: absolute;    
+    height: 100%;
+    text-align: center;    
+    width: 100%;
+}
+
+.text-box:before, .medium-box:before, .small-box:before, .img-box:before {
+   content: '';
+   display: inline-block;
+   height: 100%;
+   vertical-align: middle;
+}
+
+.img-box img {
+  display: inline-block;
+  border-radius: 50%;
+  height: 200px;
+  position: relative;
+  margin-bottom: 300px;
+}
+
+.text-box p, .medium-box p, .small-box p {
+   display: inline-block;
+   font-weight: bold;  
+   word-wrap: break-word;
+}
+
+.text-box p {
+  font-size: 3rem;
+}
+
+.medium-box p {
+  font-size: 1.5rem;
+}
+
+.small-box p {
+  font-size: 1rem;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+ /* Mobile */
+@media (max-width:760px) { 
+    /* matches 'btn-xs' */
+    .btn-responsive {
+        padding: 1px 5px;
+        font-size: 12px;
+        line-height: 1.5;
+        border-radius: 3px;
+    }
+
+    .img-box img {
+      height: 60px;
+      margin-bottom: 90px;
+    }
+
+    .text-box p, .medium-box p {
+      font-size: 100%;
+    }
+
+    .text-box p {
+      font-size: 1rem;
+    }
+}

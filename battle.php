@@ -105,6 +105,8 @@ if ($result->num_rows > 0) {
             echo "<p>dead $dead </p>";
             $dead = floor($dead);
             $bounty = $cost * $dead;
+            $bounty/=2;
+            $bounty = floor($bounty);
             echo "<p>bounty: $bounty </p>";
 
 
@@ -116,6 +118,14 @@ if ($result->num_rows > 0) {
             $moarsql = "UPDATE Player_Units SET Num = (Num - $dead) where Name = '$nom' and Unit_ID = $ID";
 
             if ($conn->query($moarsql) === TRUE) {
+
+
+            } else {
+                echo "Error updating record: " . $conn->error;
+            }
+
+            $bountysql = "UPDATE Player SET Money = (Money + $bounty) where Name = '$attack'";
+            if ($conn->query($bountysql) === TRUE) {
 
 
             } else {
@@ -174,6 +184,11 @@ if ($result->num_rows > 0) {
             echo "<p>dead $dead </p>";
             $dead = floor($dead);
 
+            $bounty = $cost * $dead;
+            $bounty/=2;
+            $bounty = floor($bounty);
+            echo "<p>bounty: $bounty </p>";
+
             $damage -= $dead * $HP;
             echo "<p>damage after: $damage </p>";
 
@@ -187,7 +202,13 @@ if ($result->num_rows > 0) {
                 echo "Error updating record: " . $conn->error;
             }
 
+            $bountysql = "UPDATE Player SET Money = (Money + $bounty) where Name = '$nom'";
+            if ($conn->query($bountysql) === TRUE) {
 
+
+            } else {
+                echo "Error updating record: " . $conn->error;
+            }
 
         }
 

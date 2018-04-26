@@ -2,7 +2,7 @@
 include('dbconnect.php');
 require_once("session.php");
 
-
+$terr = $_GET["terr"];
 $attack = $_GET["attack"];
 $nom = $_SESSION['name'];
 echo "<p>$name</p>";
@@ -221,11 +221,21 @@ else {
 
 if ($strength > $strength2) {
     echo "<p>$name has won the battle and the territory</p>";
+    $winner = $name;
 }
 else {
     echo "<p>$attack has won the battle and the territory</p>";
+    $winner = $attack;
 }
 
 
+$sql = "UPDATE Player_Territory SET Name = '$winner' Where Terr_ID = $terr";
+
+if ($conn->query(sql) === TRUE) {
+
+
+} else {
+    echo "Error updating record: " . $conn->error;
+}
 //Header("Location:index.php?increment=$strength");
 ?>

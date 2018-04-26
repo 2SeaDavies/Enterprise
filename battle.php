@@ -71,6 +71,7 @@ if ($result->num_rows > 0) {
         $HP = $row["HP"];
         $healthy+= $row["HP"];
         $num = $row["Num"];
+        $cost = $row["Cost"];
 
         echo "<p>healthy $healthy </p>";
         $ID = $row["Unit_ID"];
@@ -103,6 +104,10 @@ if ($result->num_rows > 0) {
             $dead = $damage2 / $HP;
             echo "<p>dead $dead </p>";
             $dead = floor($dead);
+            $bounty = $cost * $dead;
+            echo "<p>bounty: $bounty </p>";
+
+
 
             $damage2 -= $dead * $HP;
             echo "<p>damage after: $damage2 </p>";

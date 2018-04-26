@@ -127,7 +127,7 @@ else {
     echo "0 results";
 }
 $healthy = 0;
-
+$dead = 0;
 $sql = "Select * from Unit,Player_Units where Unit.Unit_ID = Player_Units.Unit_ID and Player_Units.Name = '$attack' and Ran in (Select min(Ran) from Unit,Player_Units where Unit.Unit_ID = Player_Units.Unit_ID and Num > 0 and Player_Units.Name = '$attack')";
 $result = $conn->query($sql);
 if ($result->num_rows > 0) {
@@ -151,6 +151,33 @@ if ($result->num_rows > 0) {
 
             if ($conn->query($sql) === TRUE) {
                 echo "<p> they died </p>";
+            } else {
+                echo "Error updating record: " . $conn->error;
+            }
+
+
+
+        }
+
+        else {
+            echo "<p>damage before: $damage </p>";
+            echo "<p>healthy $healthy </p>";
+            if ($damage > 0) {
+                $dead = $damage / $HP;
+            }
+
+            echo "<p>dead $dead </p>";
+            $dead = floor($dead);
+
+            $damage -= $dead * $HP;
+            echo "<p>damage after: $damage </p>";
+
+            echo "<p>dead: $dead </p>";
+            $moarsql = "UPDATE Player_Units SET Num = (Num - $dead) where Name = '$attack' and Unit_ID = $ID";
+
+            if ($conn->query($moarsql) === TRUE) {
+
+
             } else {
                 echo "Error updating record: " . $conn->error;
             }

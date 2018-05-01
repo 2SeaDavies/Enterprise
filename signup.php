@@ -93,6 +93,7 @@
                 <div class="form-group">
                     <button onclick="document.getElementById('signup').submit();">Signup</button>
                 </div>
+                <p>Already have an account? <a href="login.php">Click Here</a> to login.</p>
 
             </form>
 

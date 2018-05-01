@@ -50,15 +50,17 @@
             </div>
             <div class="collapse navbar-collapse" id="myNavbar">
                 <ul class="nav navbar-nav">
-                    <li><a href="/Soldier.php">Buy Units</a></li>
+                    <li><a href="/index.php">Buy Units</a></li>
                     <li><a href="/territories.php">View Territories</a></li>
                     <li><a href="/playas.php">Players</a></li>
                 </ul>
 
                 <ul class="nav navbar-nav navbar-right">
-                    <button onclick='location.href = "logout.php";'>Logout</button>
+                    <li><a href="logout.php" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
+                        <form id="logout-form" action="logout.php" method="POST" style="display: none;"><input type="hidden"></form></li>
 
 
+                </ul>
 
 
 

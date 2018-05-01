@@ -5,14 +5,12 @@ require_once("session.php");
 $terr = $_GET["terr"];
 $attack = $_GET["attack"];
 $nom = $_SESSION['name'];
-echo "<p>$name</p>";
 $sql = "SELECT * FROM Unit,Player_Units WHERE Unit.Unit_ID = Player_Units.Unit_ID and Player_Units.Num >0 and Player_Units.Name = '$nom'";
 $result = $conn->query($sql);
 $strength =0;
 if ($result->num_rows > 0) {
     // output data of each row
     while($row = $result->fetch_assoc()) {
-        echo "id: " . $row["Name"]. " - Name: " . $row["Unit_ID"]. " " . $row["Num"]. "<br>";
         $name = $row["Name"];
         $unitattack = $row["Attack"];
         $unitattack *= $row["Num"];
@@ -24,13 +22,10 @@ if ($result->num_rows > 0) {
 
     }
 } else {
-    echo "0 results";
+
 }
 $strength /=3;
 $strength = round($strength);
-echo "<p>$strength</p>";
-echo "<p> $attack </p>";
-
 
 
 
@@ -40,7 +35,6 @@ $strength2 =0;
 if ($result->num_rows > 0) {
     // output data of each row
     while($row = $result->fetch_assoc()) {
-        echo "id: " . $row["Name"]. " - Name: " . $row["Unit_ID"]. " " . $row["Num"]. "<br>";
         $name = $row["Name"];
         $unitattack = $row["Attack"];
         $unitattack *= $row["Num"];
@@ -52,190 +46,345 @@ if ($result->num_rows > 0) {
 
     }
 } else {
-    echo "0 results";
+
 }
 $strength2 /=3;
 $strength2 = round($strength2);
-echo "<p>$strength2</p>";
 $damage2 = $strength2;
 $damage = $strength;
-
-
-$sql = "Select * from Unit,Player_Units where Unit.Unit_ID = Player_Units.Unit_ID and Player_Units.Name = '$nom' and Ran in (Select min(Ran) from Unit,Player_Units where Unit.Unit_ID = Player_Units.Unit_ID and Num > 0 and Player_Units.Name = '$nom')";
-$result = $conn->query($sql);
-if ($result->num_rows > 0) {
-    // output data of each row
-    while ($row = $result->fetch_assoc()) {
-        echo "id: " . $row["Name"] . " - Name: " . $row["Unit_ID"] . " " . $row["Num"] . "<br>";
-        echo "<p>healthy $healthy </p>";
-        $HP = $row["HP"];
-        $healthy+= $row["HP"];
-        $num = $row["Num"];
-        $cost = $row["Cost"];
-
-        echo "<p>healthy $healthy </p>";
-        $ID = $row["Unit_ID"];
-
-        echo "<p>healthy $healthy </p>";
-        $healthy *= $row["Num"];
-        echo "<p>healthy $healthy </p>";
+$count = 0;
 
 
 
-        if ($damage2 > $healthy) {
+while ($count < 6) {
+    $count += 1;
+    $sql = "Select * from Unit,Player_Units where Unit.Unit_ID = Player_Units.Unit_ID and Player_Units.Name = '$nom' and Ran in (Select min(Ran) from Unit,Player_Units where Unit.Unit_ID = Player_Units.Unit_ID and Num > 0 and Player_Units.Name = '$nom')";
+    $result = $conn->query($sql);
+    if ($result->num_rows > 0) {
+        // output data of each row
+        while ($row = $result->fetch_assoc()) {
+            $healthy = 0;
+            $dead = 0;
+            $HP = $row["HP"];
+            $healthy += $row["HP"];
+            $num = $row["Num"];
+            $cost = $row["Cost"];
+            $corpse = $row["UName"];
 
-            $sql = "UPDATE Player_Units SET Num = 0 where Unit_ID = $ID and Player_Units.Name = '$nom'";
+            $ID = $row["Unit_ID"];
+            $healthy *= $row["Num"];
 
-            if ($conn->query($sql) === TRUE) {
-                $damage2 -= $healthy;
-                echo "<p> they died </p>";
-                echo "<p> $damage2 </p>";
+
+
+            if ($damage2 > $healthy) {
+
+                $sql = "UPDATE Player_Units SET Num = 0 where Unit_ID = $ID and Player_Units.Name = '$nom'";
+
+                if ($conn->query($sql) === TRUE) {
+                    $damage2 -= $healthy;
+                    $message = "You lost all your $corpse"."s";
+                    echo "<script type='text/javascript'>alert('$message');</script>";
+                } else {
+                    echo "Error updating record: " . $conn->error;
+                }
+
 
             } else {
-                echo "Error updating record: " . $conn->error;
+
+                $dead = $damage2 / $HP;
+                $dead = floor($dead);
+                $bounty = $cost * $dead;
+                $bounty /= 2;
+                $bounty = floor($bounty);
+                if ($dead >0) {
+                    $message = "You lost $dead $corpse" . "s";
+                    echo "<script type='text/javascript'>alert('$message');</script>";
+                }
+
+
+                $damage2 -= $dead * $HP;
+
+                $moarsql = "UPDATE Player_Units SET Num = (Num - $dead) where Name = '$nom' and Unit_ID = $ID";
+
+                if ($conn->query($moarsql) === TRUE) {
+
+
+                } else {
+                    echo "Error updating record: " . $conn->error;
+                }
+
+                $bountysql = "UPDATE Player SET Money = (Money + $bounty) where Name = '$attack'";
+                if ($conn->query($bountysql) === TRUE) {
+
+
+                } else {
+                    echo "Error updating record: " . $conn->error;
+                }
             }
-
-
-            
         }
-        else {
-            echo "<p>damage before: $damage2 </p>";
-            echo "<p>healthy $healthy </p>";
-            $dead = $damage2 / $HP;
-            echo "<p>dead $dead </p>";
-            $dead = floor($dead);
-            $bounty = $cost * $dead;
-            $bounty/=2;
-            $bounty = floor($bounty);
-            echo "<p>bounty: $bounty </p>";
-
-
-
-            $damage2 -= $dead * $HP;
-            echo "<p>damage after: $damage2 </p>";
-
-            echo "<p>dead: $dead </p>";
-            $moarsql = "UPDATE Player_Units SET Num = (Num - $dead) where Name = '$nom' and Unit_ID = $ID";
-
-            if ($conn->query($moarsql) === TRUE) {
-
-
-            } else {
-                echo "Error updating record: " . $conn->error;
-            }
-
-            $bountysql = "UPDATE Player SET Money = (Money + $bounty) where Name = '$attack'";
-            if ($conn->query($bountysql) === TRUE) {
-
-
-            } else {
-                echo "Error updating record: " . $conn->error;
-            }
-
-
-
-        }
+    } else {
 
     }
-}
-else {
-    echo "0 results";
-}
-$healthy = 0;
-$dead = 0;
-$sql = "Select * from Unit,Player_Units where Unit.Unit_ID = Player_Units.Unit_ID and Player_Units.Name = '$attack' and Ran in (Select min(Ran) from Unit,Player_Units where Unit.Unit_ID = Player_Units.Unit_ID and Num > 0 and Player_Units.Name = '$attack')";
-$result = $conn->query($sql);
-if ($result->num_rows > 0) {
-    // output data of each row
-    while ($row = $result->fetch_assoc()) {
-        echo "id: " . $row["Name"] . " - Name: " . $row["Unit_ID"] . " " . $row["Num"] . "<br>";
-        echo "<p>healthy $healthy </p>";
-        $healthy+= $row["HP"];
-        echo "<p>healthy $healthy </p>";
-        $ID = $row["Unit_ID"];
+    $healthy = 0;
+    $dead = 0;
+    $sql = "Select * from Unit,Player_Units where Unit.Unit_ID = Player_Units.Unit_ID and Player_Units.Name = '$attack' and Ran in (Select min(Ran) from Unit,Player_Units where Unit.Unit_ID = Player_Units.Unit_ID and Num > 0 and Player_Units.Name = '$attack')";
+    $result = $conn->query($sql);
+    if ($result->num_rows > 0) {
+        // output data of each row
+        while ($row = $result->fetch_assoc()) {
+            $healthy += $row["HP"];
+            $HP = $row["HP"];
 
-        echo "<p>healthy $healthy </p>";
-        $healthy *= $row["Num"];
-        echo "<p>healthy $healthy </p>";
-        echo "<p>damage $damage </p>";
+            $ID = $row["Unit_ID"];
+
+            $healthy *= $row["Num"];
+            $cost = $row["Cost"];
 
 
-        if ($damage > $healthy) {
+            if ($damage > $healthy) {
 
-            $sql = "UPDATE Player_Units SET Num = 0 where Unit_ID = $ID and Player_Units.Name = '$attack'";
+                $sql = "UPDATE Player_Units SET Num = 0 where Unit_ID = $ID and Player_Units.Name = '$attack'";
 
-            if ($conn->query($sql) === TRUE) {
-                echo "<p> they died </p>";
-            } else {
-                echo "Error updating record: " . $conn->error;
-            }
-
-
-
-        }
-
-        else {
-            echo "<p>damage before: $damage </p>";
-            echo "<p>healthy $healthy </p>";
-            if ($damage > 0) {
-                $dead = $damage / $HP;
-            }
-
-            echo "<p>dead $dead </p>";
-            $dead = floor($dead);
-
-            $bounty = $cost * $dead;
-            $bounty/=2;
-            $bounty = floor($bounty);
-            echo "<p>bounty: $bounty </p>";
-
-            $damage -= $dead * $HP;
-            echo "<p>damage after: $damage </p>";
-
-            echo "<p>dead: $dead </p>";
-            $moarsql = "UPDATE Player_Units SET Num = (Num - $dead) where Name = '$attack' and Unit_ID = $ID";
-
-            if ($conn->query($moarsql) === TRUE) {
-
+                if ($conn->query($sql) === TRUE) {
+                } else {
+                    echo "Error updating record: " . $conn->error;
+                }
+                $damage -= $healthy;
 
             } else {
-                echo "Error updating record: " . $conn->error;
-            }
 
-            $bountysql = "UPDATE Player SET Money = (Money + $bounty) where Name = '$nom'";
-            if ($conn->query($bountysql) === TRUE) {
+                $dead = 0;
+                if ($damage > 0) {
+                    $dead = $damage / $HP;
+                }
+                $dead = floor($dead);
+
+                $bounty2 = $cost * $dead;
+                $bounty2 /= 2;
+                $bounty2 = floor($bounty2);
+                $totalbounty += $bounty2;
+
+                $damage -= $dead * $HP;
+
+                $moarsql = "UPDATE Player_Units SET Num = (Num - $dead) where Name = '$attack' and Unit_ID = $ID";
+
+                if ($conn->query($moarsql) === TRUE) {
 
 
-            } else {
-                echo "Error updating record: " . $conn->error;
+                } else {
+                    echo "Error updating record: " . $conn->error;
+                }
+
+                $bountysql = "UPDATE Player SET Money = (Money + $bounty2) where Name = '$nom'";
+                if ($conn->query($bountysql) === TRUE) {
+
+
+                } else {
+                    echo "Error updating record: " . $conn->error;
+                }
+
             }
 
         }
+    } else {
 
     }
-}
-else {
-    echo "0 results";
 }
 
 
 if ($strength > $strength2) {
-    echo "<p>$name has won the battle and the territory</p>";
-    $winner = $name;
+    $msg = "you have won the battle and the territory";
+    $winner = $nom;
 }
 else {
-    echo "<p>$attack has won the battle and the territory</p>";
+    $msg = "you were defeated";
     $winner = $attack;
 }
 
+echo "<script type='text/javascript'>alert('$msg');</script>";
 
-$sql = "UPDATE Player_Territory SET Name = '$winner' Where Terr_ID = $terr";
+If ($totalbounty> 0)
+{$winrar = "You made $totalbounty for killing enemy units";
+    echo "<script type='text/javascript'>alert('$winrar');</script>";
+}
 
-if ($conn->query(sql) === TRUE) {
+
+
+
+$sql = "UPDATE Player_Territory SET Name = '$winner' Where Terr_ID = '$terr'";
+
+if ($conn->query($sql) === TRUE) {
 
 
 } else {
     echo "Error updating record: " . $conn->error;
 }
-//Header("Location:index.php?increment=$strength");
+
 ?>
+
+
+<?php require_once("session.php"); ?>
+<!DOCTYPE html>
+<html>
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Commander!</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="css/portfolio-item.css" rel="stylesheet">
+
+    <!-- Personal CSS -->
+    <link href="css/personal.css" rel="stylesheet">
+
+
+    <script src='https://www.google.com/recaptcha/api.js'></script>
+    <!-- Javascript -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+    <title>Home</title>
+
+</head>
+
+<body>
+<?php
+$name = $_SESSION['name'];
+$sql = "select SUM(Value) as total from Territory,Player_Territory,Player where Player.Name = Player_Territory.Name and Player_Territory.Terr_ID = Territory.Terr_ID and Player.name = '$name'";
+$result = $conn->query($sql);
+while ($row = $result->fetch_assoc()) {
+    $total = $row["total"];
+    $total += 250;
+
+}
+?>
+<div class="container">
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">Commander!</a>
+            </div>
+            <div class="collapse navbar-collapse" id="myNavbar">
+                <ul class="nav navbar-nav">
+                    <li><a href="/index.php">Buy Units</a></li>
+                    <li><a href="/territories.php">View Territories</a></li>
+                    <li><a href="/playas.php">Players</a></li>
+                </ul>
+
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="logout.php" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
+                        <form id="logout-form" action="logout.php" method="POST" style="display: none;"><input type="hidden"></form></li>
+
+
+                </ul>
+
+
+
+
+
+                </li>
+                </ul>
+                </li>
+                </ul>
+            </div>
+        </div>
+    </nav>        </div>
+
+
+<div class="container">
+
+    <div class='panel panel-primary'><div class='panel-heading'><h2 class='panel-title'>Home</h2></div><div class='panel-body'>
+
+
+            <?php echo "<p>Welcome ".$_SESSION['name']."  your daily income is $total</p>";
+            $name = $_SESSION['name'];
+
+            $sql = "SELECT Money from Player where Name = '$name'";
+
+            $result = $conn->query($sql);
+
+            while($row = $result->fetch_assoc()) {
+                $Money = $row["Money"];
+            }
+
+            echo "<table class=\"table table-striped task-table\">
+<tr>
+<th></th>
+<th>Name</th>
+<th> Power!</th>
+<th>In Your Army</th>
+<th>Cost</th>
+<th> Available Cash: $Money</th>
+
+</tr>";
+
+            $sql = "SELECT Unit.*, Player_Units.Num FROM Unit, Player_Units WHERE Unit.Unit_ID = Player_Units.Unit_ID and Player_Units.Name = '$name'";
+            $result = $conn->query($sql);
+
+
+            while ($row = $result->fetch_assoc()) {
+                $name = $row['UName'];
+
+                $Attack = $row['Attack'] ;
+                $HP = $row['HP'];
+                $Acc = $row['Acc'];
+                $Power =($Attack + $HP + $Acc)/3;
+                $Power = round($Power);
+                echo "<tr>";
+                echo "<td> <img src=".$row['UName'].".jpg width ='50px' </td>";
+                echo "<td>" . $row['UName'] . "</td>";
+                echo "<td>" . $Power . "</td>";
+                echo "<td>" . $row['Num'] . "</td>";
+                echo "<td>" . $row['Cost'] . "</td>";
+                echo "<td> <a class='btn btn-md btn-primary' href='$name.php'>Get Moar!</a> </td>";
+
+                echo "</tr>";
+
+            }
+
+            echo "</table>";
+
+            ?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        </div>
+
+
+
+        </form>
+
+    </div></div>
+</div>
+
+</body>
+</html>
+

@@ -28,8 +28,9 @@
 <?php
 
 include('dbconnect.php');
-
+require_once("session.php");
 $attack = $_GET["attack"];
+$nom = $_SESSION['name'];
 
 
 
@@ -54,37 +55,17 @@ $attack = $_GET["attack"];
             </div>
             <div class="collapse navbar-collapse" id="myNavbar">
                 <ul class="nav navbar-nav">
-                    <li><a href="/Soldier.php">Buy Units</a></li>
+                    <li><a href="/index.php">Buy Units</a></li>
                     <li><a href="/territories.php">Territories</a></li>
                     <li><a href="/playas.php">Players</a></li>
                 </ul>
 
 
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="/forum">Forums</a></li>
+                    <li><a href="logout.php" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
+                        <form id="logout-form" action="logout.php" method="POST" style="display: none;"><input type="hidden"></form></li>
 
-                    <!--<li class="dropdown">
-        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Social
-        <span class="caret"></span></a>
-        <ul class="dropdown-menu">
-            <li><a href="/forum">Forums</a></li>
-            <li><a href="/chat">Chat</a></li>
-            <li><a href="/profile">Profile</a></li>
-        </ul>
-      </li>-->
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                            <?php echo $name ?> <span class="caret"></span>
-                        </a>
 
-                        <ul class="dropdown-menu" role="menu">
-                            <li><a href="/players/418">Profile</a></li>
-                            <li><a href="/profile">Edit Profile</a></li>
-                            <li><a href="/password">Change Password</a></li>
-                            <li>
-                                <a href="logout.php" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
-                                <form id="logout-form" action="logout.php" method="POST" style="display: none;"><input type="hidden"></form>
-                            </li>
                         </ul>
                     </li>
                 </ul>
@@ -109,9 +90,9 @@ $attack = $_GET["attack"];
                     include('dbconnect.php');
 
 
-                    $getunits = "SELECT * FROM Territory, Player_Territory,Player where Player_Territory.Terr_ID = Territory.Terr_ID and Player_Territory.Name = Player.Name";
+                    $getTerr = "SELECT * FROM Territory, Player_Territory,Player where Player_Territory.Terr_ID = Territory.Terr_ID and Player_Territory.Name = Player.Name and Player.Name !='$nom' Order by Territory.Value desc";
 
-                    $result = $conn->query($getunits);
+                    $result = $conn->query($getTerr);
 
 
 
@@ -120,7 +101,6 @@ $attack = $_GET["attack"];
 <tr>
 <th>Owner</th>
 <th>Value</th>
-<th>Territory Number</th>
 
 </tr>";
 
@@ -130,8 +110,7 @@ $attack = $_GET["attack"];
                         echo "<tr>";
                         echo "<td>" . $row['Name'] . "</td>";
                         echo "<td>" . $row['Value'] . "</td>";
-                        echo "<td>" . $row['Terr_ID'] . "</td>";
-                       echo "<td> <a class='btn btn-md btn-primary' href='battle.php?attack=".$row['Name']."'>Attack this territory</a> </td>";
+                       echo "<td> <a class='btn btn-md btn-primary' href='battle.php?attack=".$row['Name']."&terr=".$row['Terr_ID']."'>Attack this territory</a> </td>";
 
 
                         echo "</tr>";

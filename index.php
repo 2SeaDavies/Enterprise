@@ -25,11 +25,18 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
         <title>Home</title>
-		<?php include("style.php"); ?>
-	</head>
-	
-	<body>
 
+	<body>
+    <?php
+    $name = $_SESSION['name'];
+    $sql = "select SUM(Value) as total from Territory,Player_Territory,Player where Player.Name = Player_Territory.Name and Player_Territory.Terr_ID = Territory.Terr_ID and Player.name = '$name'";
+    $result = $conn->query($sql);
+    while ($row = $result->fetch_assoc()) {
+        $total = $row["total"];
+        $total += 250;
+
+    }
+    ?>
 
     <div class="container">
         <nav class="navbar navbar-default">
@@ -51,9 +58,11 @@
                     </ul>
 
                     <ul class="nav navbar-nav navbar-right">
-                        <button onclick='location.href = "logout.php";'>Logout</button>
+                        <li><a href="logout.php" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
+                            <form id="logout-form" action="logout.php" method="POST" style="display: none;"><input type="hidden"></form></li>
 
 
+                    </ul>
 
 
 
@@ -73,8 +82,8 @@
         <div class='panel panel-primary'><div class='panel-heading'><h2 class='panel-title'>Home</h2></div><div class='panel-body'>
 
 
-                    <?php echo "<p>Welcome ".$_SESSION['name']."</p>";
-                        $name = $_SESSION['name'];
+                    <?php echo "<p>Welcome ".$_SESSION['name']."  your daily income is $total</p>";
+
 
                         $sql = "SELECT Money from Player where Name = '$name'";
 
@@ -86,6 +95,7 @@
 
                     echo "<table class=\"table table-striped task-table\">
 <tr>
+<th></th>
 <th>Name</th>
 <th> Power!</th>
 <th>In Your Army</th>
@@ -99,7 +109,7 @@
 
 
                         while ($row = $result->fetch_assoc()) {
-                            $name = $row['Name'];
+                            $name = $row['UName'];
 
                             $Attack = $row['Attack'] ;
                             $HP = $row['HP'];
@@ -107,7 +117,8 @@
                             $Power =($Attack + $HP + $Acc)/3;
                             $Power = round($Power);
                             echo "<tr>";
-                            echo "<td>" . $row['Name'] . "</td>";
+                            echo "<td> <img src=".$row['UName'].".jpg width ='50px' </td>";
+                            echo "<td>" . $row['UName'] . "</td>";
                             echo "<td>" . $Power . "</td>";
                             echo "<td>" . $row['Num'] . "</td>";
                             echo "<td>" . $row['Cost'] . "</td>";

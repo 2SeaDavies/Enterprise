@@ -73,10 +73,12 @@
                     <ul class="nav navbar-nav">
                     </ul>
 
-
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a href="/login.php">Log In</a></li>
+                        <li><a href="/signup.php">Sign Up</a></li>
                     </ul>
+
+
+
                 </div>
             </div>
         </nav>        </div>
@@ -85,14 +87,30 @@
 
         <div class='panel panel-primary'><div class='panel-heading'><h3 class='panel-title'>Login</h3></div><div class='panel-body'>
 
-                <h1>Login</h1>
-                <form id="login" action="login_handler.php" method="post">
-                    <input type="text" placeholder="name" id="name" name="name" required><br><br>
-                    <input type="password" placeholder="Password" id="password" name="password" required><br><br>
-                    <button onclick="document.getElementById('login').submit();">Login</button>
-                </form>
 
-                <p>Not a user? <a href="signup.php">Click Here</a> to signup.</p>
+                <form id="login" action="login_handler.php" method="post">
+
+                    <div class="form-group">
+                        <label for="name">Name:</label>
+                        <input class="form-control" name="name" type="text" id="name">
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="password">Password:</label>
+                        <input class="form-control" name="password" type="password" value="" id="password">
+                    </div>
+
+
+                    <div class="form-group">
+                        <button onclick="document.getElementById('login').submit();">Login</button>
+                    </div>
+
+                </form>
+                <p>Haven't started playing yet? <a href="signup.php">Click Here</a> to signup.</p>
+
+
+
 
             </div></div>
     </div>

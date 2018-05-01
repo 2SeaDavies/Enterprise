@@ -72,8 +72,12 @@ if ($result->num_rows > 0) {
 } else {
     echo "0 results";
 }
+$max = $available / $cost;
+$max = floor($max);
 $num += $order;
 $cost *= $order;
+
+$max -= $order;
 
 if ($available >= $cost) {
     $available -= $cost;
@@ -114,35 +118,19 @@ if ($available >= $cost) {
             </div>
             <div class="collapse navbar-collapse" id="myNavbar">
                 <ul class="nav navbar-nav">
-                    <li><a href="/Soldier.php">Buy Units</a></li>
-                    <li><a href="/territories.php">Territories</a></li>
-                    <li><a href="/resources">Players</a></li>
+                    <li><a href="/index.php">Buy Units</a></li>
+                    <li><a href="/territories.php">View Territories</a></li>
+                    <li><a href="/playas.php">Players</a></li>
                 </ul>
 
 
+
                 <ul class="nav navbar-nav navbar-right">
+                    <li><a href="logout.php" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
+                        <form id="logout-form" action="logout.php" method="POST" style="display: none;"><input type="hidden"></form></li>
 
-                    <!--<li class="dropdown">
-        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Social
-        <span class="caret"></span></a>
-        <ul class="dropdown-menu">
-            <li><a href="/forum">Forums</a></li>
-            <li><a href="/chat">Chat</a></li>
-            <li><a href="/profile">Profile</a></li>
-        </ul>
-      </li>-->
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                            <?php echo $name ?> <span class="caret"></span>
-                        </a>
 
-                        <ul class="dropdown-menu" role="menu">
-                            <li><a href="/players/418">Profile</a></li>
-                            <li><a href="/profile">Edit Profile</a></li>
-                            <li><a href="/password">Change Password</a></li>
-                            <li>
-                                <a href="logout.php" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
-                                <form id="logout-form" action="logout.php" method="POST" style="display: none;"><input type="hidden"></form>
+                </ul>
                             </li>
                         </ul>
                     </li>
@@ -168,14 +156,22 @@ if ($available >= $cost) {
                     <br>
                     <div class="form-group">
                         <input class="form-control" type="submit"  value="Hire one">
+
                     </div>
+            </form>
+            <form method="Get" action="Jeep.php" accept-charset="UTF-8">
+
+                <input name="Buy" type="hidden" value="<?php echo $max ?>">
+                <div class="form-group">
+                    <input class="form-control" type="submit"  value="Hire the maximum <?php echo $max ?> ">
+
                 </div>
+            </form>
 
 
 
 
-
-
+        </div>
 
                 <div class='col-sm-6'>
                     <h4>Stats</h4>
@@ -208,7 +204,7 @@ if ($available >= $cost) {
                     $cost = 0;
                     while($row = $result->fetch_assoc()) {
                         echo "<tr>";
-                        echo "<td>" . $row['Name'] . "</td>";
+                        echo "<td>" . $row['UName'] . "</td>";
                         echo "<td>" . $row['HP'] . "</td>";
                         echo "<td>" . $row['Attack'] . "</td>";
                         echo "<td>" . $row['Acc'] . "</td>";

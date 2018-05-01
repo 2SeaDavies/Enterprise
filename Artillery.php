@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
+
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -25,12 +27,13 @@
 
 <body>
 <?php
+
 require_once("session.php");
 include('dbconnect.php');
 
 $order = $_GET["Buy"];
 $name = $_SESSION["name"];
-
+// get the player's details
 $sql = "SELECT * FROM Player WHERE Name = '$name'";
 $result = $conn->query($sql);
 
@@ -42,7 +45,7 @@ if ($result->num_rows > 0) {
 } else {
     echo "0 results";
 }
-
+//get the unit details
 $sql = "SELECT * FROM Player_Units WHERE Name = '$name' AND Unit_ID =6";
 $result = $conn->query($sql);
 
@@ -70,13 +73,16 @@ if ($result->num_rows > 0) {
 
 } else {
     echo "0 results";
-}
+}//getting the available units and the cost of the order
 $max = $available / $cost;
 $max = floor($max);
+//setting what the number of units will be
 $num += $order;
 $cost *= $order;
 
 $max -= $order;
+
+// updating the player's money
 if ($available >= $cost) {
     $available -= $cost;
     $sql = "UPDATE Player SET Money='$available' WHERE Name='$name'";
@@ -87,7 +93,7 @@ if ($available >= $cost) {
     } else {
         echo "Error updating record: " . $conn->error;
     }
-
+//updating the number of units
     $sql = "UPDATE Player_Units SET Num='$num' WHERE Name='$name' and Unit_ID =6 ";
 
 
@@ -101,7 +107,7 @@ if ($available >= $cost) {
 ?>
 
 
-
+<!-- HTML Layout-->
 <div class="container">
     <nav class="navbar navbar-default">
         <div class="container-fluid">
@@ -177,6 +183,8 @@ if ($available >= $cost) {
 
 
                     <?php
+
+                    //get the unit details
                     include('dbconnect.php');
 
 
@@ -197,7 +205,7 @@ if ($available >= $cost) {
 <th>Cost</th>
 
 </tr>";
-
+//displaying the unit details in a table
 
                     $cost = 0;
                     while($row = $result->fetch_assoc()) {

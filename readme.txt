@@ -28,3 +28,5 @@ There's probably quite a bit of redundant code in there, things like bootstrap t
 previous projects of mine and some code was taken from my code library from previous projects.
 
 I have tried to remove as much redundant code as possible, but I'm sure I missed some, I don't remember using Jquery or captchas at all... But The linked files are still sitting there, also I think I have 2 Bootstraps now...
+
+I also realise that Adminer is there, I used phpmyadmin... I'm not deleting it now.

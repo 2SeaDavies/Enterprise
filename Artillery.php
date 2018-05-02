@@ -60,7 +60,7 @@ if ($result->num_rows > 0) {
     echo "0 results";
 }
 
-//get the unit details
+//get the unit detailshttps://youtu.be/yu4qbwYeNhY
 $getunits = "SELECT * FROM Unit WHERE Unit_ID = 6";
 
 $result = $conn->query($getunits);
@@ -146,7 +146,7 @@ if ($available >= $cost) {
 
 <div class="container">
 
-    <div class='panel panel-primary'><div class='panel-heading'><h3 class='panel-title'>Recruit Heavy Tanks</h3></div><div class='panel-body'>
+    <div class='panel panel-primary'><div class='panel-heading'><h3 class='panel-title'>Recruit Artillery</h3></div><div class='panel-body'>
 
             <form method="Get" action="Artillery.php" accept-charset="UTF-8">
 

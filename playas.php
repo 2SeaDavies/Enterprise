@@ -1,9 +1,4 @@
-<?php
-/*
-*	https://github.com/knitein/PHP-Signup-Login
-*	Simplest fully featured user management with Signup and Login, made with PHP.
-*/
-?>
+
 <?php require_once("session.php"); ?>
 <!DOCTYPE html>
 <html>
@@ -30,7 +25,6 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
     <title>Home</title>
-    <?php include("style.php"); ?>
 </head>
 
 <body>
@@ -82,7 +76,7 @@
 
             <?php echo "<p>Welcome ".$_SESSION['name']."</p>";
             $name = $_SESSION['name'];
-
+//I'm quite confident this isn't used... You can tell how I made this page too
             $sql = "SELECT Money from Player where Name = '$name'";
 
             $result = $conn->query($sql);
@@ -98,7 +92,7 @@
 
 
 </tr>";
-
+            // display the details of the other players
             $sql = "SELECT Name FROM Player";
             $result = $conn->query($sql);
 
@@ -107,7 +101,8 @@
                 $name = $row['Name'];
                 echo "<tr>";
                 echo "<td>" . $row['Name'] . "</td>";
-                $Power = 0;
+                $Power = 0
+                    // get the player details
                 $moarSQL = "SELECT Unit.*,Player_Units.Num FROM Unit, Player_Units WHERE Unit.Unit_ID = Player_Units.Unit_ID and Player_Units.Name = '$name'";
                 $result2 = $conn->query($moarSQL);
                 while ($row = $result2->fetch_assoc())  {
@@ -115,6 +110,7 @@
                     $HP = $row['HP'];
                     $Acc = $row['Acc'];
                     $Num = $row['Num'];
+                    // the formula for power! Just an average of the stats, it only loosely corresponds to a unit's actual combat ability
                     $Power += ((($Attack + $HP + $Acc) * $Num) / 3);
                     $Power = round($Power);
 

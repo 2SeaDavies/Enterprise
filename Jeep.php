@@ -222,7 +222,7 @@ if ($available >= $cost) {
 
 
                     echo "</table>";
-
+                    // A little bit of flavour text
                     ?>
 
                     <h4>Equipment</h4>

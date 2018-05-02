@@ -101,7 +101,7 @@
                 $name = $row['Name'];
                 echo "<tr>";
                 echo "<td>" . $row['Name'] . "</td>";
-                $Power = 0
+                $Power = 0;
                     // get the player details
                 $moarSQL = "SELECT Unit.*,Player_Units.Num FROM Unit, Player_Units WHERE Unit.Unit_ID = Player_Units.Unit_ID and Player_Units.Name = '$name'";
                 $result2 = $conn->query($moarSQL);

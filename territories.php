@@ -26,10 +26,13 @@
 
 <body>
 <?php
+// get db and session
 
 include('dbconnect.php');
 require_once("session.php");
+// I think this one is redundant, but I'm not going to delete it now
 $attack = $_GET["attack"];
+// get the player name
 $nom = $_SESSION['name'];
 
 
@@ -39,7 +42,7 @@ $nom = $_SESSION['name'];
 
 ?>
 
-
+<!-- Display -->
 
 <div class="container">
     <nav class="navbar navbar-default">
@@ -87,16 +90,17 @@ $nom = $_SESSION['name'];
                 <div class='col-sm-6'>
 
                     <?php
+                    //definitely redundant, still too scared to delete
                     include('dbconnect.php');
 
-
+                    // get the details of the territories that aren't the player's
                     $getTerr = "SELECT * FROM Territory, Player_Territory,Player where Player_Territory.Terr_ID = Territory.Terr_ID and Player_Territory.Name = Player.Name and Player.Name !='$nom' Order by Territory.Value desc";
 
                     $result = $conn->query($getTerr);
 
 
 
-
+                    // display those territories
                     echo "<table class=\"table table-striped task-table\">
 <tr>
 <th>Owner</th>

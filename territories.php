@@ -80,7 +80,7 @@ $nom = $_SESSION['name'];
 
 <div class="container">
 
-    <div class='panel panel-primary'><div class='panel-heading'><h3 class='panel-title'>Recruit Soldiers</h3></div><div class='panel-body'>
+    <div class='panel panel-primary'><div class='panel-heading'><h3 class='panel-title'> Territories you can attack</h3></div><div class='panel-body'>
 
             <form method="Get" action="Soldier.php" accept-charset="UTF-8">
 

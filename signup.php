@@ -1,5 +1,6 @@
 
 <?php
+//start the session, put them to the index page if they're already signed in.
 	session_start();
 	if(isset($_SESSION["name"])) { header('location: index.php'); }
 ?>
@@ -28,13 +29,13 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
         <title>Signup</title>
-		<?php include("style.php"); ?> 
 		
 		<?php
+        // display error messages if necessary
 			if(isset($_GET["msg"])) {
 				switch ($_GET["msg"]) {
 					case 1:
-					echo '<script>alert("Unknown error occured, try again.");</script>';
+					echo '<script>alert("Something strange happened, please try again.");</script>';
 					break;
 					
 					case 2:
@@ -48,6 +49,9 @@
 
 
 <body>
+
+
+<!-- Signup form display -->
 <div class="container">
     <nav class="navbar navbar-default">
         <div class="container-fluid">

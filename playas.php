@@ -24,7 +24,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
-    <title>Home</title>
+    <title>Players</title>
 </head>
 
 <body>
@@ -71,7 +71,7 @@
 
 <div class="container">
 
-    <div class='panel panel-primary'><div class='panel-heading'><h2 class='panel-title'>Home</h2></div><div class='panel-body'>
+    <div class='panel panel-primary'><div class='panel-heading'><h2 class='panel-title'>Enemy player powers</h2></div><div class='panel-body'>
 
 
             <?php echo "<p>Welcome ".$_SESSION['name']."</p>";

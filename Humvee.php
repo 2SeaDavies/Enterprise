@@ -26,12 +26,14 @@
 
 <body>
 <?php
+//get the session details
 require_once("session.php");
+//include db connect
 include('dbconnect.php');
-
+//get the purchased number and player name
 $order = $_GET["Buy"];
 $name = $_SESSION["name"];
-
+//get the other player details
 $sql = "SELECT * FROM Player WHERE Name = '$name'";
 $result = $conn->query($sql);
 
@@ -43,7 +45,7 @@ if ($result->num_rows > 0) {
 } else {
     echo "0 results";
 }
-
+// get the number of humvees in the player army
 $sql = "SELECT * FROM Player_Units WHERE Name = '$name' AND Unit_ID =4";
 $result = $conn->query($sql);
 
@@ -56,7 +58,7 @@ if ($result->num_rows > 0) {
     echo "0 results";
 }
 
-
+// get the humvee details
 $getunits = "SELECT * FROM Unit WHERE Unit_ID = 4";
 
 $result = $conn->query($getunits);
@@ -72,6 +74,7 @@ if ($result->num_rows > 0) {
 } else {
     echo "0 results";
 }
+//get the maximum available calculate the new number of humvees and the cost
 $max = $available / $cost;
 $max = floor($max);
 $num += $order;
@@ -80,6 +83,7 @@ $cost *= $order;
 $max -= $order;
 if ($available >= $cost) {
     $available -= $cost;
+        //update the player cash
     $sql = "UPDATE Player SET Money='$available' WHERE Name='$name'";
 
 
@@ -88,7 +92,7 @@ if ($available >= $cost) {
     } else {
         echo "Error updating record: " . $conn->error;
     }
-
+    //get the new humvees
     $sql = "UPDATE Player_Units SET Num='$num' WHERE Name='$name' and Unit_ID =4";
 
 
@@ -141,12 +145,12 @@ if ($available >= $cost) {
 <div class="container">
 
     <div class='panel panel-primary'><div class='panel-heading'><h3 class='panel-title'>Recruit Soldiers</h3></div><div class='panel-body'>
-
+            <!-- prepping the form for buying one -->
             <form method="Get" action="Humvee.php" accept-charset="UTF-8">
 
                 <input name="Buy" type="hidden" value="1">
 
-
+                <!-- Showing available cash -->
                 <div class='col-sm-6'>
                     <h2>Cash Available: <?php echo $available ?></h2>
 
@@ -159,7 +163,7 @@ if ($available >= $cost) {
                     </div>
             </form>
             <form method="Get" action="Humvee.php" accept-charset="UTF-8">
-
+                <!-- prepping the max button -->
                 <input name="Buy" type="hidden" value="<?php echo $max ?>">
                 <div class="form-group">
                     <input class="form-control" type="submit"  value="Hire the maximum <?php echo $max ?> ">
@@ -181,7 +185,7 @@ if ($available >= $cost) {
                     <?php
                     include('dbconnect.php');
 
-
+                    //get the humvee details
                     $getunits = "SELECT * FROM Unit WHERE Unit_ID = 4";
 
                     $result = $conn->query($getunits);
@@ -200,7 +204,7 @@ if ($available >= $cost) {
 
 </tr>";
 
-
+                    //display the unit details
                     $cost = 0;
                     while($row = $result->fetch_assoc()) {
                         echo "<tr>";
@@ -218,7 +222,7 @@ if ($available >= $cost) {
                     echo "</table>";
 
                     ?>
-
+                    <!-- Flavour Text -->
                     <h4>Equipment</h4>
                     <ul>
                         <li>Primary Weapon: <strong>2 Blaster rifles..?</strong></li>

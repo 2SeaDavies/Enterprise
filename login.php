@@ -1,5 +1,6 @@
 
 <?php
+// start the session and redirect if needed
 	session_start();
 	if(isset($_SESSION["name"])) { header('location: index.php'); }
 ?>
@@ -28,9 +29,10 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
         <title>Login</title>
-		<?php include("style.php"); ?>
+
 		
 		<?php
+        // alerts including possible error messages
 			if(isset($_GET["msg"])) {
 				switch ($_GET["msg"]) {
 					case 1:
@@ -38,16 +40,16 @@
 					break;
 					
 					case 2:
-					echo '<script>alert("Invalid username/password!");</script>';
+					echo '<script>alert("Incorrect username or password!");</script>';
 					break;
 					
 					case 3:
                         echo "Error updating record: " . $conn->error;
-					echo '<script>alert("Unknown error occured, try again.");</script>';
+					echo '<script>alert("Something went wrong, please try again, it should not happen twice");</script>';
 					break;
 					
 					case 4:
-					echo '<script>alert("Either the username or password was empty, please try again.");</script>';
+					echo '<script>alert("Either the username,password or both were empty, please try again.");</script>';
 					break;
 				}
 			}
@@ -87,7 +89,7 @@
 
         <div class='panel panel-primary'><div class='panel-heading'><h3 class='panel-title'>Login</h3></div><div class='panel-body'>
 
-
+                <!-- Login Display -->
                 <form id="login" action="login_handler.php" method="post">
 
                     <div class="form-group">

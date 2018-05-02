@@ -27,10 +27,12 @@
 
 <body>
 <?php
-
+//get the session details
 require_once("session.php");
-include('dbconnect.php');
 
+//this page is not on github for obvious reasons, but you know what a dbconnect page looks like.
+include('dbconnect.php');
+//get the number of units bought and the player name
 $order = $_GET["Buy"];
 $name = $_SESSION["name"];
 // get the player's details
@@ -45,7 +47,7 @@ if ($result->num_rows > 0) {
 } else {
     echo "0 results";
 }
-//get the unit details
+//get the player unit details
 $sql = "SELECT * FROM Player_Units WHERE Name = '$name' AND Unit_ID =6";
 $result = $conn->query($sql);
 
@@ -58,7 +60,7 @@ if ($result->num_rows > 0) {
     echo "0 results";
 }
 
-
+//get the unit details
 $getunits = "SELECT * FROM Unit WHERE Unit_ID = 6";
 
 $result = $conn->query($getunits);

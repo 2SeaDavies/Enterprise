@@ -26,12 +26,14 @@
 
 <body>
 <?php
+//get the session details
 require_once("session.php");
+//this page is not on github for obvious reasons, but you know what a dbconnect page looks like.
 include('dbconnect.php');
-
+//get how many units are being bought and the player name
 $order = $_GET["Buy"];
 $name = $_SESSION["name"];
-
+//get the player details
 $sql = "SELECT * FROM Player WHERE Name = '$name'";
 $result = $conn->query($sql);
 
@@ -43,7 +45,7 @@ if ($result->num_rows > 0) {
 } else {
     echo "0 results";
 }
-
+//get the details of the player's army
 $sql = "SELECT * FROM Player_Units WHERE Name = '$name' AND Unit_ID =3";
 $result = $conn->query($sql);
 
@@ -56,7 +58,7 @@ if ($result->num_rows > 0) {
     echo "0 results";
 }
 
-
+//get the details of the units in the player's army
 $getunits = "SELECT * FROM Unit WHERE Unit_ID = 3";
 
 $result = $conn->query($getunits);
@@ -72,13 +74,16 @@ if ($result->num_rows > 0) {
 } else {
     echo "0 results";
 }
+//working out the maximum number that can be bought
 $max = $available / $cost;
 $max = floor($max);
+//working out the new purchased number
 $num += $order;
+//working out the cost of the order
 $cost *= $order;
 
 $max -= $order;
-
+//getting the player's available cash
 if ($available >= $cost) {
     $available -= $cost;
     $sql = "UPDATE Player SET Money='$available' WHERE Name='$name'";
@@ -89,7 +94,7 @@ if ($available >= $cost) {
     } else {
         echo "Error updating record: " . $conn->error;
     }
-
+    //giving the player their new units
     $sql = "UPDATE Player_Units SET Num='$num' WHERE Name='$name' and Unit_ID =3 ";
 
 
@@ -147,7 +152,7 @@ if ($available >= $cost) {
 
                 <input name="Buy" type="hidden" value="1">
 
-
+                <!-- showing available cash -->
                 <div class='col-sm-6'>
                     <h2>Cash Available: <?php echo $available ?></h2>
 
@@ -160,7 +165,7 @@ if ($available >= $cost) {
                     </div>
             </form>
             <form method="Get" action="Jeep.php" accept-charset="UTF-8">
-
+                <!-- setting the form value for the buy max button-->
                 <input name="Buy" type="hidden" value="<?php echo $max ?>">
                 <div class="form-group">
                     <input class="form-control" type="submit"  value="Hire the maximum <?php echo $max ?> ">
@@ -179,9 +184,10 @@ if ($available >= $cost) {
 
 
                     <?php
+                    //this is redundant, but I'm not changing anything at this stage
                     include('dbconnect.php');
 
-
+                    //getting the details of the jeep
                     $getunits = "SELECT * FROM Unit WHERE Unit_ID = 3";
 
                     $result = $conn->query($getunits);
@@ -200,7 +206,7 @@ if ($available >= $cost) {
 
 </tr>";
 
-
+                    // display the jeep details
                     $cost = 0;
                     while($row = $result->fetch_assoc()) {
                         echo "<tr>";

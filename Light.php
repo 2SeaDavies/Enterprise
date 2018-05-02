@@ -26,15 +26,19 @@
 
 <body>
 <?php
+// get session details
 require_once("session.php");
+//db connect does not exist here because it contains passwords :O :O
 include('dbconnect.php');
-
+// get the number of units being bought if any
 $order = $_GET["Buy"];
-$name = $_SESSION["name"];
 
+// get the player name
+$name = $_SESSION["name"];
+// get the player details
 $sql = "SELECT * FROM Player WHERE Name = '$name'";
 $result = $conn->query($sql);
-
+// get the player's money
 if ($result->num_rows > 0) {
     // output data of each row
     while($row = $result->fetch_assoc()) {
@@ -43,7 +47,7 @@ if ($result->num_rows > 0) {
 } else {
     echo "0 results";
 }
-
+// get the number of light tanks in the player's army
 $sql = "SELECT * FROM Player_Units WHERE Name = '$name' AND Unit_ID =5";
 $result = $conn->query($sql);
 
@@ -56,7 +60,7 @@ if ($result->num_rows > 0) {
     echo "0 results";
 }
 
-
+// get the details of the light tank
 $getunits = "SELECT * FROM Unit WHERE Unit_ID = 5";
 
 $result = $conn->query($getunits);
@@ -72,13 +76,17 @@ if ($result->num_rows > 0) {
 } else {
     echo "0 results";
 }
+
+// get the maximum number that the player can buy
 $max = $available / $cost;
 $max = floor($max);
+// get how many light tanks they'll have now
 $num += $order;
+// get the cost of those light tanks
 $cost *= $order;
-
+// update max so it doesn't go wrong
 $max -= $order;
-
+// update the player cash
 if ($available >= $cost) {
     $available -= $cost;
     $sql = "UPDATE Player SET Money='$available' WHERE Name='$name'";
@@ -89,6 +97,7 @@ if ($available >= $cost) {
     } else {
         echo "Error updating record: " . $conn->error;
     }
+    // give the player their new tanks
 
     $sql = "UPDATE Player_Units SET Num='$num' WHERE Name='$name' and Unit_ID =5 ";
 
@@ -185,9 +194,10 @@ if ($available >= $cost) {
 
 
                     <?php
+                    //redundant but I'm too scared to delete at the 11th hour
                     include('dbconnect.php');
 
-
+                    // get all the unit details, also probably redundant
                     $getunits = "SELECT * FROM Unit WHERE Unit_ID = 5";
 
                     $result = $conn->query($getunits);
@@ -206,7 +216,7 @@ if ($available >= $cost) {
 
 </tr>";
 
-
+                    //display light tank details
                     $cost = 0;
                     while($row = $result->fetch_assoc()) {
                         echo "<tr>";
@@ -224,7 +234,7 @@ if ($available >= $cost) {
                     echo "</table>";
 
                     ?>
-
+                        <!-- Flavour text -->
                     <h4>Equipment</h4>
                     <ul>
                         <li>Primary Weapon: <strong>Puteaux SA 1918 37 mm gun </strong></li>

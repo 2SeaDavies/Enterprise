@@ -26,12 +26,14 @@
 
 <body>
 <?php
+//get the session
 require_once("session.php");
+// get db connect
 include('dbconnect.php');
-
+// get ordered units and the player name
 $order = $_GET["Buy"];
 $name = $_SESSION["name"];
-
+// get the player details
 $sql = "SELECT * FROM Player WHERE Name = '$name'";
 $result = $conn->query($sql);
 
@@ -43,7 +45,7 @@ if ($result->num_rows > 0) {
 } else {
     echo "0 results";
 }
-
+// get the number of soldiers in the player's army
 $sql = "SELECT * FROM Player_Units WHERE Name = '$name' AND Unit_ID =1";
 $result = $conn->query($sql);
 
@@ -56,6 +58,7 @@ if ($result->num_rows > 0) {
     echo "0 results";
 }
 
+// get the details of the soldier
 
 $getunits = "SELECT * FROM Unit WHERE Unit_ID = 1";
 
@@ -72,17 +75,20 @@ if ($result->num_rows > 0) {
 } else {
     echo "0 results";
 }
+// get the maximum available to order
 $max = $available / $cost;
 $max = floor($max);
+// set the new number of soldiers and the cost of buying them
 $num += $order;
 $cost *= $order;
-
+//correct the new max
 $max -= $order;
 
 
 
 if ($available >= $cost) {
     $available -= $cost;
+    //update the player's cash
     $sql = "UPDATE Player SET Money='$available' WHERE Name='$name'";
 
 
@@ -91,6 +97,7 @@ if ($available >= $cost) {
     } else {
         echo "Error updating record: " . $conn->error;
     }
+    //give the player their new soldiers
 
     $sql = "UPDATE Player_Units SET Num='$num' WHERE Name='$name' and Unit_ID =1 ";
 
@@ -104,7 +111,7 @@ if ($available >= $cost) {
 
 ?>
 
-
+<!-- Display -->
 
 <div class="container">
     <nav class="navbar navbar-default">
@@ -144,7 +151,7 @@ if ($available >= $cost) {
 <div class="container">
 
     <div class='panel panel-primary'><div class='panel-heading'><h3 class='panel-title'>Recruit Soldiers</h3></div><div class='panel-body'>
-
+            <!-- Set up form to buy one soldier -->
             <form method="Get" action="Soldier.php" accept-charset="UTF-8">
 
                 <input name="Buy" type="hidden" value="1">
@@ -161,6 +168,7 @@ if ($available >= $cost) {
 
                     </div>
             </form>
+            <!-- Set up form to buy the maximum number of soldiers -->
             <form method="Get" action="Soldier.php" accept-charset="UTF-8">
 
                 <input name="Buy" type="hidden" value="<?php echo $max ?>">
@@ -189,7 +197,7 @@ if ($available >= $cost) {
                     <?php
                     include('dbconnect.php');
 
-
+                    // get the soldier details
                     $getunits = "SELECT * FROM Unit WHERE Unit_ID = 1";
 
                     $result = $conn->query($getunits);
@@ -208,7 +216,7 @@ if ($available >= $cost) {
 
 </tr>";
 
-
+                    //display the soldier details
                     $cost = 0;
                     while($row = $result->fetch_assoc()) {
                         echo "<tr>";
@@ -226,7 +234,7 @@ if ($available >= $cost) {
                     echo "</table>";
 
                     ?>
-
+                    <!-- Flavour Text-->
                     <h4>Equipment</h4>
                     <ul>
                         <li>Primary Weapon: <strong>DP 28 Machine Gun</strong></li>

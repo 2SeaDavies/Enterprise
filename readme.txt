@@ -27,4 +27,4 @@ to what you get out is crazy, github says that including bootstrap there's 12,00
 There's probably quite a bit of redundant code in there, things like bootstrap templates were taken from
 previous projects of mine and some code was taken from my code library from previous projects.
 
-I have tried to remove as much redundant code as possible, but I'm sure I missed some.
+I have tried to remove as much redundant code as possible, but I'm sure I missed some, I don't remember using Jquery or captchas at all... But The linked files are still sitting there, also I think I have 2 Bootstraps now...

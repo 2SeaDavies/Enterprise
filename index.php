@@ -1,5 +1,7 @@
 
-<?php require_once("session.php"); ?>
+<?php
+//getting the session
+require_once("session.php"); ?>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -28,7 +30,9 @@
 
 	<body>
     <?php
+    //getting the logged in player's name
     $name = $_SESSION['name'];
+    //getting the player's income
     $sql = "select SUM(Value) as total from Territory,Player_Territory,Player where Player.Name = Player_Territory.Name and Player_Territory.Terr_ID = Territory.Terr_ID and Player.name = '$name'";
     $result = $conn->query($sql);
     while ($row = $result->fetch_assoc()) {
@@ -82,9 +86,11 @@
         <div class='panel panel-primary'><div class='panel-heading'><h2 class='panel-title'>Home</h2></div><div class='panel-body'>
 
 
-                    <?php echo "<p>Welcome ".$_SESSION['name']."  your daily income is $total</p>";
+                    <?php
+                    //displaying the welcome message with the player's name and income
+                    echo "<p>Welcome ".$_SESSION['name']."  your daily income is $total</p>";
 
-
+                        //getting the player's available cash
                         $sql = "SELECT Money from Player where Name = '$name'";
 
                             $result = $conn->query($sql);
@@ -103,7 +109,7 @@
 <th> Available Cash: $Money</th>
 
 </tr>";
-
+                    //getting the player's units
                     $sql = "SELECT Unit.*, Player_Units.Num FROM Unit, Player_Units WHERE Unit.Unit_ID = Player_Units.Unit_ID and Player_Units.Name = '$name'";
                     $result = $conn->query($sql);
 

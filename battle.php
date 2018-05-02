@@ -321,8 +321,9 @@ while ($row = $result->fetch_assoc()) {
 
 
             <?php echo "<p>Welcome ".$_SESSION['name']."  your daily income is $total</p>";
+            //getting the player's name you can see how I made this page by the fact that this is redundant here
             $name = $_SESSION['name'];
-//getting the available cash
+                //getting the available cash
             $sql = "SELECT Money from Player where Name = '$name'";
 
             $result = $conn->query($sql);
